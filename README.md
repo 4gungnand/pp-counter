@@ -1,31 +1,23 @@
-# Penghitung Orang menggunakan Computer Vision
+# People Counter using Computer Vision
 
-Repository ini berisi alat dan sumber daya untuk membuat program untuk menghitung orang di dalam sebuah ruang kelas menggunakan alat-alat computer vision seperti OpenCV.
+This repository contains programs to count people inside a classroom using OpenCV.
 
-## Dataset dan Alat Labeling
+## Dataset and Labeling Tool
 
-Kami melakukan anotasi pada dataset untuk tujuan pelatihan menggunakan alat labeling dari:
+We annotated the dataset for training purposes using the labeling tool from:
 https://github.com/HumanSignal/labelImg
 
-## Referensi
+## References
 
-Berikut adalah beberapa referensi yang mungkin berguna untuk mengimplementasikan program penghitung orang Anda:
+1. [People Counter by jeffskinnerbox](https://github.com/jeffskinnerbox/people-counter)
+2. [PeopleCounter by Gupu25](https://github.com/Gupu25/PeopleCounter)
 
-1. [Penghitung Orang oleh jeffskinnerbox](https://github.com/jeffskinnerbox/people-counter)
-2. [PeopleCounter oleh Gupu25](https://github.com/Gupu25/PeopleCounter)
+## Future Work
 
-Silakan jelajahi repositori ini untuk wawasan dan inspirasi tentang bagaimana mengembangkan solusi Anda sendiri.
+- Integration of dataset pre-processing scripts
+- Training scripts for various object detection models
+- Optimization for real-time performance
 
-## Pekerjaan Mendatang
+## License
 
-Di masa depan, kami berencana untuk mengimplementasikan fitur-fitur berikut:
-
-- Integrasi skrip pra-pemrosesan dataset
-- Skrip pelatihan untuk berbagai model deteksi objek
-- Optimisasi untuk kinerja real-time
-
-Nantikan pembaruan selanjutnya!
-
-## Lisensi
-
-Proyek ini dilisensikan di bawah [Lisensi MIT](LICENSE). Silakan gunakan, modifikasi, dan distribusikan kode sesuai dengan ketentuan lisensi.
+This project is licensed under the [MIT License](LICENSE). Feel free to use, modify, and distribute the code in accordance with the terms of the license.

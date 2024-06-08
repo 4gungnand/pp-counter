@@ -2,6 +2,21 @@
 
 This repository contains programs to count people inside a classroom using OpenCV.
 
+## How to install
+
+1. Clone the repository
+2. Install the required packages using the following command:
+```bash
+pip install -r requirements.txt
+```
+
+## How to run
+
+1. Run the following command to start the program:
+```bash
+python people_counter.py
+```
+
 ## Dataset and Labeling Tool
 
 We annotated the dataset for training purposes using the labeling tool from:

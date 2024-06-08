@@ -1,6 +1,12 @@
 /INRIA-Person-detection-dataset-1
-/dataset/cropped
 /svm-test/datasets
 /svm-test/Input
 /svm-test/Output_Images
 /svm-test/Output_Video
+/Face-Detection-24
+/dataset
+/face
+/face_output
+/windows_v1.8.1
+/svm-exp
+/test

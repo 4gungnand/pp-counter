@@ -78,11 +78,12 @@ def non_max_suppression(boxes, overlapThresh):
 
     return boxes[pick].astype("int")
 
+time = "09-06-2024"
 # Load the trained model and scaler
-with open('svm_new.pkl', 'rb') as f:
+with open(f'svm_{time}.pkl', 'rb') as f:
     svm_classifier = pickle.load(f)
 
-with open('scaler_new.pkl', 'rb') as f:
+with open(f'scaler_{time}.pkl', 'rb') as f:
     scaler = pickle.load(f)
 
 # Example usage on an image
@@ -110,10 +111,10 @@ classified_windows = classify_windows(windows, svm_classifier, scaler)
 
 # Apply non-max suppression
 boxes = np.array([(x1, y1, x2, y2) for (x1, y1), (x2, y2), _ in classified_windows])
-pick = non_max_suppression(boxes, 0.3)
+# pick = non_max_suppression(boxes, 0.3)
 
 # Draw bounding boxes around classified windows
-for (x1, y1, x2, y2) in pick:
+for (x1, y1, x2, y2) in boxes:
     # Adjust the coordinates based on the ROI
     x1 += xmin
     y1 += ymin
@@ -124,5 +125,5 @@ for (x1, y1, x2, y2) in pick:
 # Display the roi with bounding boxes
 plt.imshow(image)
 # Display the number of detected people
-plt.title('Detected People: {}'.format(len(pick)))
+plt.title('Detected People: {}'.format(len(boxes)))
 plt.show()

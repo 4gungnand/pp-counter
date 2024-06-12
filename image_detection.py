@@ -2,13 +2,16 @@ import cv2
 from skimage.feature import hog
 import pickle
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
+
+IMAGE_SIZE = (64, 64)
+VIEW_PORT = (960, 720)
 
 # Function to extract HOG features from an image
-def extract_hog_features(image):
-    features, hog_image = hog(image, orientations=9, pixels_per_cell=(8, 8),
-                              cells_per_block=(2, 2), transform_sqrt=True, block_norm='L2-Hys', visualize=True)
-    return features
+def extract_features(image):
+    hog_features = hog(image, orientations=9, pixels_per_cell=(8, 8),
+                           cells_per_block=(2, 2), transform_sqrt=True, block_norm="L2")
+    return hog_features
 
 # Function to perform sliding window detection
 def sliding_window(image, window_size, stride):
@@ -21,23 +24,21 @@ def sliding_window(image, window_size, stride):
             windows.append(((x, y), (x + window_width, y + window_height), window))
     return windows
 
-# Function to classify windows using the trained SVM classifier
-def classify_windows(windows, svm_classifier, scaler):
+# Function to classify windows using the trained SVM model
+def classify_windows(windows, model, scaler):
     classified_windows = []
     for (x1, y1), (x2, y2), window in windows:
-        window = cv2.resize(window, (128, 128))
-        hog_features = extract_hog_features(window).reshape(1, -1)
+        hog_features = extract_features(window).reshape(1, -1)
         scaled_features = scaler.transform(hog_features)
-        prediction = svm_classifier.predict(scaled_features)
+        prediction = model.predict(scaled_features)
         if prediction == 1:
             classified_windows.append(((x1, y1), (x2, y2), prediction))
     return classified_windows
 
-# Function to read an image from disk
-def read_image(image_path):
-    image = cv2.imread(image_path)
+# Function to read an image, grayscale it, and resize it 
+def preprocess_image(image):
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    image = cv2.resize(image, (960, 720))
+    image = cv2.resize(image, VIEW_PORT)
     return image
 
 # Function to perform non-max suppression
@@ -86,44 +87,47 @@ with open(f'svm_{time}.pkl', 'rb') as f:
 with open(f'scaler_{time}.pkl', 'rb') as f:
     scaler = pickle.load(f)
 
-# Example usage on an image
-image_path = 'dataset/fcv/IMG_2393.jpg'
-image = read_image(image_path)
+# # Example usage on an image
+# image_path = 'dataset/fcv/IMG_2393.jpg'
+# image = cv2.imread(image_path)
+# image = preprocess_image(image)
 
-# Define ROI coordinates as a percentage of the image dimensions
-xmin_pct = 0.1  # 10% from the left
-ymin_pct = 0.2  # 20% from the top
-xmax_pct = 0.9  # 90% to the right
-ymax_pct = 0.8  # 80% to the bottom
+# # Define ROI coordinates as a percentage of the image dimensions
+# xmin_pct = 0.1  # 10% from the left
+# ymin_pct = 0.3  # 20% from the top
+# xmax_pct = 0.9  # 90% to the right
+# ymax_pct = 0.8  # 80% to the bottom
 
-# Calculate the actual ROI coordinates
-height, width = image.shape
-xmin = int(xmin_pct * width)
-ymin = int(ymin_pct * height)
-xmax = int(xmax_pct * width)
-ymax = int(ymax_pct * height)
+# # Calculate the actual ROI coordinates
+# height, width = image.shape
+# xmin = int(xmin_pct * width)
+# ymin = int(ymin_pct * height)
+# xmax = int(xmax_pct * width)
+# ymax = int(ymax_pct * height)
 
-# Crop the image using the ROI
-roi = image[ymin:ymax, xmin:xmax]
-print(roi.shape)
-windows = sliding_window(roi, window_size=(128, 128), stride=8)
-classified_windows = classify_windows(windows, svm_classifier, scaler)
+# # Crop the image using the ROI
+# roi = image[ymin:ymax, xmin:xmax]
+# print("ROI shape:", roi.shape)
+# windows = sliding_window(roi, window_size=IMAGE_SIZE, stride=8)
+# classified_windows = classify_windows(windows, svm_classifier, scaler)
 
-# Apply non-max suppression
-boxes = np.array([(x1, y1, x2, y2) for (x1, y1), (x2, y2), _ in classified_windows])
-# pick = non_max_suppression(boxes, 0.3)
+# boxes = np.array([(x1, y1, x2, y2) for (x1, y1), (x2, y2), _ in classified_windows])
 
-# Draw bounding boxes around classified windows
-for (x1, y1, x2, y2) in boxes:
-    # Adjust the coordinates based on the ROI
-    x1 += xmin
-    y1 += ymin
-    x2 += xmin
-    y2 += ymin
-    cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
+# # Apply non-max suppression
+# nms = non_max_suppression(boxes, 0.3)
 
-# Display the roi with bounding boxes
-plt.imshow(image)
-# Display the number of detected people
-plt.title('Detected People: {}'.format(len(boxes)))
-plt.show()
+# # Draw bounding boxes around classified windows
+# for (x1, y1, x2, y2) in nms:
+#     # Adjust the coordinates based on the ROI
+#     x1 += xmin
+#     y1 += ymin
+#     x2 += xmin
+#     y2 += ymin
+#     cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
+
+# # Display the roi with bounding boxes
+# plt.imshow(image)
+
+# # Display the number of detected people
+# plt.title('Detected People: {}'.format(len(boxes)))
+# plt.show()

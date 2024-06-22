@@ -12,3 +12,6 @@
 /test
 /person-faces-5
 /n
+
+# ignore compiled bytecode
+*.pyc

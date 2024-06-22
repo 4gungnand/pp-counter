@@ -107,6 +107,8 @@ with open(f'scaler_{time}.pkl', 'rb') as f:
 
 # # Crop the image using the ROI
 # roi = image[ymin:ymax, xmin:xmax]
+
+
 # print("ROI shape:", roi.shape)
 # windows = sliding_window(roi, window_size=IMAGE_SIZE, stride=8)
 # classified_windows = classify_windows(windows, svm_classifier, scaler)
